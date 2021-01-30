@@ -86,7 +86,7 @@ public:
     String outputText = "";
 
     ImportantBusinessLogicSwitch(IoAbstractionRef ioDevice, int pinNumber) {
-        m_switch.initialise(ioDevice);
+        m_switch.initialise(ioDevice, true); /* use pullup switching */
         m_pin = pinNumber;
     }
 
@@ -112,9 +112,6 @@ void test_switchinput_mock() {
     //or function.
     ImportantBusinessLogicSwitch mySwitch(&mockedInput, 0);
 
-    TEST_ASSERT_TRUE(true);
-    return;
-
     //execute business logic once
     String output1 = mySwitch.checkAndReact();
 
@@ -128,8 +125,8 @@ void test_switchinput_mock() {
     //and reacted.
     //switches are pulled by default, meaning if we return a "1" the switch is not pressed.
     //when the input goes to GND / 0, the switch is recognized as pressed.
-    TEST_ASSERT_EQUAL_STRING(output1.c_str(), "PRESSED");
-    TEST_ASSERT_EQUAL_STRING(output2.c_str(), "UNPRESSED");
+    TEST_ASSERT_EQUAL_STRING(output1.c_str(), "UNPRESSED");
+    TEST_ASSERT_EQUAL_STRING(output2.c_str(), "PRESSED");
 }
 
 /* == Unit tests that fake input from the Arduino core and Wire library for the business logic == */
