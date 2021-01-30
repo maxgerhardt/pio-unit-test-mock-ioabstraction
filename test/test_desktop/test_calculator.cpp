@@ -102,6 +102,8 @@ public:
     String checkAndReact() {
         //read current input and propagte to object
         //usually called by task manager but we need to call it manually here
+        //SwitchInput::runLoop() will automaticall call runLoop() of the iodevice through ioDeviceSync().
+        //we do not need to addtionally call that, that's automatic.
         m_switch.runLoop();
         if(m_switch.isSwitchPressed(m_pin)) {
             outputText = "PRESSED";
@@ -134,10 +136,10 @@ void test_switchinput_mock() {
 
     //although we did return that the input is now LOW, indicating "pressed",
     //the library internally does DEBOUNCING with a state machine.
-    //we need to trigger reading a few more times (at least 3, but no more than 20 (HOLD_LIMIT) because it will recognize as "held") 
+    //we need to trigger reading a few more times (at least 2, but no more than 20 (HOLD_LIMIT) because it will recognize as "held") 
     //before it will be recognized as "pressed".
     String outputEnd = "";
-    for(int i=0; i < 3; i++) {
+    for(int i=0; i < 2; i++) {
         outputEnd = mySwitch.checkAndReact();
     }
     //now the button should definitely read as pressed after being polled through some long
