@@ -72,13 +72,13 @@ void test_ioabstraction_mock() {
 /* Import business logic implementation 
  * that is unit-testable
  */
-class ImportandBusinessLogicSwitch {
+class ImportantBusinessLogicSwitch {
 public:
     SwitchInput m_switch;
     int m_pin;
     String outputText = "";
 
-    ImportandBusinessLogicSwitch(IoAbstractionRef ioDevice, int pinNumber) {
+    ImportantBusinessLogicSwitch(IoAbstractionRef ioDevice, int pinNumber) {
         m_switch = SwitchInput(); 
         m_switch.initialise(ioDevice);
         m_pin = pinNumber;
@@ -104,7 +104,7 @@ void test_switchinput_mock() {
     //business logic creation. 
     //assume that the input device is controllable via constructor 
     //or function.
-    ImportandBusinessLogicSwitch mySwitch(&mockedInput, 0);
+    ImportantBusinessLogicSwitch mySwitch(&mockedInput, 0);
 
     //execute business logic once
     String output1 = mySwitch.checkAndReact();
