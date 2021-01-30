@@ -30,7 +30,8 @@ void setUp(void) {
 
 void test_ioabstraction_mock() {
     //created mocked IO abstraction object that has
-    //the same base type as BasicIoAbstraction. 
+    //the same base type as BasicIoAbstraction.
+    //make space for 6 timesteps. 
     MockedIoAbstraction abstr(6);
 
     //prepare mocked object. the first read should return that pin 0 is 0, then 1.
@@ -38,17 +39,25 @@ void test_ioabstraction_mock() {
     abstr.setValueForReading(0, 0x0001);
     abstr.setValueForReading(1, 0x0000);
 
+
     //execute business logic. 
     //set pins to input, read pin 0 and react to it
+    uint8_t output_value = 0x00;
     abstr.pinDirection(0, INPUT);
     bool val1 = abstr.readValue(0);
+    if(val1 == true) {
+        output_value = 0xff;
+    }
     //simulate one tick. the readValue() function will not 
     //automatically jump to the next read value that we set, 
-    //we need to 'tick' it once.
+    //we need to 'tick' it once. practically "advance time" step.
     abstr.runLoop();
+    //execute buisiness logic again..
     bool val2 = abstr.readValue(0);
 
+    //check results of buisiness logic
     TEST_ASSERT_EQUAL(val1, true);
+    TEST_ASSERT_EQUAL(output_value, 0xff);
     TEST_ASSERT_EQUAL(val2, false);
 }
 
