@@ -1,0 +1,53 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "C:/Users/Max/platformio-examples/unit-testing/calculator2/include",
+                "C:/Users/Max/platformio-examples/unit-testing/calculator2/src",
+                "C:/Users/Max/platformio-examples/unit-testing/calculator2/lib/calculator/src",
+                "C:/Users/Max/platformio-examples/unit-testing/calculator2/.pio/libdeps/native/IoAbstraction/src",
+                "C:/Users/Max/platformio-examples/unit-testing/calculator2/.pio/libdeps/native/TaskManagerIO/src",
+                "C:/Users/Max/platformio-examples/unit-testing/calculator2/.pio/libdeps/native/ArduinoFake/src",
+                "C:/Users/Max/.platformio/lib/ArduinoJson/src",
+                "C:/Users/Max/.platformio/lib/ITTIoT",
+                "C:/Users/Max/.platformio/lib/PubSubClient/src",
+                "C:/Users/Max/.platformio/packages/tool-unity",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "C:/Users/Max/platformio-examples/unit-testing/calculator2/include",
+                    "C:/Users/Max/platformio-examples/unit-testing/calculator2/src",
+                    "C:/Users/Max/platformio-examples/unit-testing/calculator2/lib/calculator/src",
+                    "C:/Users/Max/platformio-examples/unit-testing/calculator2/.pio/libdeps/native/IoAbstraction/src",
+                    "C:/Users/Max/platformio-examples/unit-testing/calculator2/.pio/libdeps/native/TaskManagerIO/src",
+                    "C:/Users/Max/platformio-examples/unit-testing/calculator2/.pio/libdeps/native/ArduinoFake/src",
+                    "C:/Users/Max/.platformio/lib/ArduinoJson/src",
+                    "C:/Users/Max/.platformio/lib/ITTIoT",
+                    "C:/Users/Max/.platformio/lib/PubSubClient/src",
+                    "C:/Users/Max/.platformio/packages/tool-unity",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=50100",
+                "port_to_output_PGM=(uint8_t*)0",
+                "digital_pin_to_port_PGM=(uint8_t*)0",
+                "port_to_input_PGM=(uint8_t*)0",
+                ""
+            ],
+            "compilerPath": "C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/gcc.exe",
+            "compilerArgs": [
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

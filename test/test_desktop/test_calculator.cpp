@@ -28,6 +28,14 @@ void setUp(void) {
 // // clean stuff up here
 // }
 
+//Simple Unit test using mocked IoAbstraction object.
+//For business logic to be testable, they need to be able 
+//to accept the general "BasicIoAbstraction" type.
+//(or EepromAbstraction if that's used).
+//highler level abstractions / objects can be created and then fed the mocked IO object with usuall  an initialise function
+//example from SwitchInput
+//void initialise(IoAbstractionRef ioDevice, bool usePullUpSwitching = false)
+//here we're using the mock object directly.
 void test_ioabstraction_mock() {
     //created mocked IO abstraction object that has
     //the same base type as BasicIoAbstraction.
@@ -59,6 +67,60 @@ void test_ioabstraction_mock() {
     TEST_ASSERT_EQUAL(val1, true);
     TEST_ASSERT_EQUAL(output_value, 0xff);
     TEST_ASSERT_EQUAL(val2, false);
+}
+
+/* Import business logic implementation 
+ * that is unit-testable
+ */
+class ImportandBusinessLogicSwitch {
+public:
+    SwitchInput m_switch;
+    int m_pin;
+    String outputText = "";
+
+    ImportandBusinessLogicSwitch(IoAbstractionRef ioDevice, int pinNumber) {
+        m_switch = SwitchInput(); 
+        m_switch.initialise(ioDevice);
+        m_pin = pinNumber;
+    }
+
+    String checkAndReact() {
+        if(m_switch.isSwitchPressed(m_pin)) {
+            outputText = "PRESSED";
+        } else {
+            outputText = "UNPRESSED";
+        }
+
+        return outputText;
+    }
+};
+
+void test_switchinput_mock() {
+    //mocked object creation
+    MockedIoAbstraction mockedInput(6);
+    mockedInput.setValueForReading(0, 0x0001);
+    mockedInput.setValueForReading(1, 0x0000);
+
+    //business logic creation. 
+    //assume that the input device is controllable via constructor 
+    //or function.
+    ImportandBusinessLogicSwitch mySwitch(&mockedInput, 0);
+
+    //execute business logic once
+    String output1 = mySwitch.checkAndReact();
+
+    //tick
+    mockedInput.runLoop();
+
+    //execute next business logic call 
+    String output2 = mySwitch.checkAndReact();
+
+    //Verify that business logic has received correct values
+    //and reacted.
+    //switches are pulled by default, meaning if we return a "1" the switch is not pressed.
+    //when the input goes to GND / 0, the switch is recognized as pressed.
+    TEST_ASSERT_EQUAL_STRING(output1.c_str(), "PRESSED");
+    TEST_ASSERT_EQUAL_STRING(output1.c_str(), "UNPRESSED");
 }
 
 void test_function_calculator_addition(void) {
