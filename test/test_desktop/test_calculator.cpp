@@ -85,13 +85,24 @@ public:
     int m_pin;
     String outputText = "";
 
+    //needs to be static to be usable as a function pointer..
+    //doesn't accept std::function
+    static void switch_pressed_cb(pinid_t key, bool heldDown) {
+        //do nothing, use polling mode.
+        (void)key;
+        (void)heldDown;
+    }
+
     ImportantBusinessLogicSwitch(IoAbstractionRef ioDevice, int pinNumber) {
         m_switch.initialise(ioDevice, true); /* use pullup switching */
-        m_switch.addSwitch(pinNumber, nullptr);
+        m_switch.addSwitch(pinNumber, &ImportantBusinessLogicSwitch::switch_pressed_cb);
         m_pin = pinNumber;
     }
 
     String checkAndReact() {
+        //read current input and propagte to object
+        //usually called by task manager but we need to call it manually here
+        m_switch.runLoop();
         if(m_switch.isSwitchPressed(m_pin)) {
             outputText = "PRESSED";
         } else {
@@ -104,33 +115,40 @@ public:
 
 void test_switchinput_mock() {
     //mocked object creation
-    MockedIoAbstraction mockedInput(2);
+    MockedIoAbstraction mockedInput(30);
+    mockedInput.resetIo();
+    //input stimulation: first two reads are high,
+    //next 28 are are low
     mockedInput.setValueForReading(0, 0x0001);
-    mockedInput.setValueForReading(1, 0x0000);
+    mockedInput.setValueForReading(1, 0x0001);
+    for(int i=2; i < 30; i++)
+        mockedInput.setValueForReading(i, 0x0000);
 
     //business logic creation. 
     //assume that the input device is controllable via constructor 
     //or function.
     ImportantBusinessLogicSwitch mySwitch(&mockedInput, 0);
 
-    //execute business logic once
-    String output1 = mySwitch.checkAndReact();
+    //execute business logic once 
+    String outputStart = mySwitch.checkAndReact();
 
-    TEST_ASSERT_TRUE(true);
-    return;
-
-    //tick
-    mockedInput.runLoop();
-
-    //execute next business logic call 
-    String output2 = mySwitch.checkAndReact();
+    //although we did return that the input is now LOW, indicating "pressed",
+    //the library internally does DEBOUNCING with a state machine.
+    //we need to trigger reading a few more times (at least 3, but no more than 20 (HOLD_LIMIT) because it will recognize as "held") 
+    //before it will be recognized as "pressed".
+    String outputEnd = "";
+    for(int i=0; i < 3; i++) {
+        outputEnd = mySwitch.checkAndReact();
+    }
+    //now the button should definitely read as pressed after being polled through some long
 
     //Verify that business logic has received correct values
     //and reacted.
     //switches are pulled by default, meaning if we return a "1" the switch is not pressed.
     //when the input goes to GND / 0, the switch is recognized as pressed.
-    TEST_ASSERT_EQUAL_STRING(output1.c_str(), "UNPRESSED");
-    TEST_ASSERT_EQUAL_STRING(output2.c_str(), "PRESSED");
+    //we can do that because the String class has overloaded equal sign operators for char*
+    TEST_ASSERT_TRUE(outputStart == "UNPRESSED");
+    TEST_ASSERT_TRUE(outputEnd == "PRESSED");
 }
 
 /* == Unit tests that fake input from the Arduino core and Wire library for the business logic == */
