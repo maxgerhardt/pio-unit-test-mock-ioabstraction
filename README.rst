@@ -9,6 +9,16 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
+
+PlatformIO IoAbstraction + ArduinoFake demonstration project
+============================================================
+
+See https://community.platformio.org/t/getting-started-with-unit-testing/18946 for reference.
+
+The unit tests in `test/test_desktop` feature examples for unit tests that mock the IoAbstraction library, the Wire library and the Arduino core in general.
+
+A small business logic class is tested that reacts on a switch, using the IoAbstraction library. It is shown how that class can be unit-tested using mocking techniques.
+
 How to test PlatformIO based project
 ====================================
 
